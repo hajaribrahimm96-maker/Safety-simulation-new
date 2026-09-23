@@ -1,245 +1,215 @@
-# Safe Medication Administration Simulation
-## محاكاة سلامة المريض
+# Patient Safety Simulation · محاكاة سلامة المريض
 
 An interactive 3D patient-safety simulation for nursing students, built with
-Three.js and WebXR. One scenario — a STAT IV paracetamol (Perfalgan) order for
-a febrile adult — runs through 7 safety checks, on screen or in a VR headset.
+Three.js and WebXR. One scenario — a STAT IV paracetamol (Perfalgan) order for a
+febrile adult — runs through 11 safety checks covering medication administration
+and fall prevention.
 
-Everything is in a single self-contained `index.html`: Three.js, the
-simulation, the font. No build step, no dependencies, no internet connection
-required.
+Runs in any modern browser on desktop, tablet and phone, and in a VR headset.
+Full Arabic/English interface with a language switch.
 
 ---
 
 ## Running it
 
-**On a laptop or a projector** — double-click `index.html`. That is all. It
-works offline.
+The simulation loads Three.js as an ES module, so **opening `index.html` by
+double-clicking will not work** — browsers block module imports over `file://`.
+It needs to be served over HTTP.
 
-**In a VR headset** — the file has to be served over **HTTPS**. WebXR refuses
-to start otherwise, and a headset cannot open a local file. See *Publishing*
-below.
+### GitHub Pages (recommended)
 
----
-
-## The question board — now movable to any wall
-
-The board that carries each safety question used to be stuck to your face in
-the headset. It can now go anywhere.
-
-### Setting it up on a computer
-
-Click the small board icon at the **bottom left**, or press **V**. A panel
-opens with:
-
-| Control | What it does |
-|---|---|
-| **Follows head** | The old behaviour — the board rides with you. Readable, but it covers the room. |
-| **Back wall / Right wall / Left wall / Front wall** | Mounts it flat on that wall. |
-| **Along the wall** | Slides it left and right across the wall it is on. |
-| **Height** | 0.9 m to 2.5 m from the floor. |
-| **Size** | 70 % to 220 %. |
-
-While the panel is open the board is drawn in the room, so you can see exactly
-where it will land before putting the headset on. The choice is saved in the
-browser, so it is still there next time. **Reset** puts it back to the default.
-
-The default is the **right wall**, because that is the only clear wall in this
-room — the back wall carries the monitor, the headwall unit, the sharps bin,
-the hand rub and the window, so a board there will sit in front of some of
-them. Slide it with *Along the wall* if you want it on the back wall anyway.
-
-### Setting it up inside the headset
-
-1. **Squeeze either grip.** The pointer turns orange and the board goes
-   half-transparent — this is aiming mode.
-2. **Point at any wall — or any surface — and pull the trigger.** The board
-   sticks there, facing you, and stays.
-
-The placement is saved the same way. Squeeze the grip again to cancel without
-moving anything.
-
-### Jumping straight to a placement
-
-`index.html?place=right` · `?place=back` · `?place=left` · `?place=front` ·
-`?place=head`, and optionally `&height=1.9&size=1.6&along=-0.4`. A URL
-overrides the saved choice for that one run without overwriting it. Adding
-`?place=1` on its own just opens the panel.
-
----
-
-## Talking to the patient
-
-Click the **microphone** in the top bar. A bar opens at the bottom with the
-conversation and a row of questions.
-
-**Speaking to her.** Press the round microphone button and talk. She answers
-out loud, and what she said is printed in the bar and on the question board.
-Speech recognition is a browser feature: it needs **Chrome or Edge** and an
-**internet connection**, and it is not reliable in Arabic. If it is
-unavailable the microphone button is greyed out and the bar says so.
-
-**Tapping a question.** Every question is also a button. This always works —
-phone, projector, headset, offline. She still answers out loud.
-
-**Inside the headset**, the questions are along the bottom of the question
-board itself. Point and pull the trigger; her reply appears above them. There
-is no microphone in VR — the Quest browser's speech recognition cannot be
-relied on, so it is not offered rather than failing in front of a class.
-
-**Arabic and English.** The two buttons in the bar switch her replies and the
-microphone language. If you speak to her in Arabic she answers in Arabic
-whatever the button says.
-
-### What she will answer
-
-Greeting · her name · date of birth · allergies · pain score · the cannula
-site · fever · when she last had paracetamol · the call bell · getting out of
-bed · consent · anything else she needs.
-
-The answers carry the clinical cues the checks depend on — she names
-penicillin when asked about allergies, says the cannula has been stinging
-since last night when asked about pain, and says the call bell slipped down
-the side of the bed. Asking her before doing a check is the point.
-
-This is keyword matching against a fixed script, not a language model: it has
-to work in a classroom with a projector and nothing else. Ask her something
-outside the script and she says she did not catch it.
-
----
-
-## The safety checks
-
-Seven stations, 100 points, in this order:
-
-1. Hand hygiene — 10
-2. Patient identification — 15
-3. The rights of administration — 15
-4. IV cannula site — 20
-5. Bed rails and fall risk — 15
-6. Call bell — 10
-7. Documentation — 15
-
-Each station asks one question. A wrong answer explains **why it is unsafe**
-and allows a retry for half marks; a right answer gives the rationale and,
-where it applies, changes the room — the side rail rises, the call bell
-returns to the patient's hand, the phlebitic cannula is re-sited. A printable
-debrief at the end lists every check, whether it was right first time, the
-score and the elapsed time.
-
----
-
-## Publishing
-
-### Netlify Drop — for a quick test link
-
-1. **Sign in first** at [app.netlify.com](https://app.netlify.com) (free).
-   A drop made while signed out is protected with a temporary password until
-   you claim it, and a headset will hit that prompt instead of the simulation.
-2. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
-3. Drag this whole folder onto the page.
-4. Open the `https://….netlify.app` link in the Quest browser.
-
-If the link returns a password prompt or a 401, the project is private — open
-it in the Netlify dashboard and make it public.
-
-### GitHub Pages — the permanent home
-
-1. In the repository: **Add file → Upload files**, drag `index.html` in, then
-   **Commit changes**.
-2. **Settings → Pages →** Source: *Deploy from a branch*, branch `main`,
-   folder `/ (root)` → **Save**.
-3. After a minute it is live at
+1. Push these files to the repository root.
+2. Repository → **Settings** → **Pages**.
+3. Source: **Deploy from a branch**, branch `main`, folder `/ (root)`. Save.
+4. After a minute the simulation is live at
    `https://hajaribrahimm96-maker.github.io/Patient-Safety-Simulation/`
 
-The file must be named `index.html` for that URL. Pages is free while the
-repository is public.
+That URL is what you share with students — no install, works on their phones.
+
+### Locally, while developing
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
 
 ---
 
-## Changes in this version
+## Project structure
 
-**The question board moves to any wall.** Preset buttons for all four walls
-plus head-locked, with height, size and along-the-wall sliders, previewed live
-on screen and saved per device. Inside the headset, squeeze a grip and pull
-the trigger to stick it wherever you point.
+```
+index.html        markup, styling, and the Three.js import map
+js/content.js     ALL text and teaching content (Arabic + English)
+js/scene.js       builds the 3D room and its animations
+js/app.js         the engine: picking, scoring, language, VR
+```
 
-**The fourth wall.** The room only had three walls — the open side was the
-camera's way in. There is now a front wall that exists only inside the
-headset, so you are not looking into a void when you turn round, and the board
-has a fourth wall to hang on.
-
-**The board looks like a board.** A white rectangle on a white hospital wall
-read as a projection, so it now has a teal frame, a drop shadow and a slightly
-cooler face, and it hangs 26 cm clear of the wall so ward equipment does not
-poke through it.
-
-**Talking to the patient**, as described above.
-
-**Clicking past the board.** With the board on a wall, a click or a trigger
-pull that misses it now passes through to the room behind. Before, anything
-the board covered was unreachable.
-
-**The header said 0/9 for a moment on load.** It says 0/7.
+The split matters: **you never have to touch 3D code to change the teaching
+content.** Everything a nurse educator would want to edit — the patient, the
+drug order, the questions, the answers, the rationales — lives in
+`js/content.js`.
 
 ---
 
-## Editing the content
+## Adding a new safety check
 
-The teaching content — the patient, the drug order, the questions, the answers
-and the rationales — is near the top of the bundled script. Look for
-`const PATIENT = {` and `const TASKS = [`. What the patient says is in
-`const DIALOGUE = [`, further down, each entry with its English and Arabic
-text, the words that trigger it, and the short label used on the board in VR.
+Three steps, no other file changes:
+
+**1.** In `js/scene.js`, build the object and register it:
+
+```js
+const oxygen = new THREE.Group();
+oxygen.position.set(-2.4, 0, -2.2);
+oxygen.add(box(0.2, 0.8, 0.2, M.metal(0x2f7f4f), 0, 0.4, 0));
+scene.add(oxygen);
+markInteractive(oxygen, 'oxygen', 1.0);   // 'oxygen' is the id, 1.0 is the marker height
+```
+
+**2.** In `js/content.js`, add a task pointing at that id:
+
+```js
+{
+  id: 'oxygen',
+  target: 'oxygen',            // must match markInteractive
+  points: 10,
+  requires: ['patient_id'],    // stations that must be done first
+  label:  { en: 'Oxygen safety', ar: 'سلامة الأكسجين' },
+  prompt: { en: '...', ar: '...' },
+  options: [
+    { correct: true, text: { en: '...', ar: '...' } },
+    { text: { en: '...', ar: '...' },
+      feedback: { en: 'why this is unsafe', ar: 'لماذا هذا غير آمن' } }
+  ],
+  rationale: { en: '...', ar: '...' },
+  effect: 'someEffect'         // optional — a function in scene.js effects{}
+}
+```
+
+**3.** Optionally add an `effect` to the `effects` object in `js/scene.js` if
+answering should change something in the room (raise a rail, lower the bed…).
+
+The checklist, the scoring, the progress counter and the debrief all pick it up
+automatically.
+
+### Changing the patient or the drug order
+
+Edit the `PATIENT` object at the top of `js/content.js`. It feeds the side panel
+and the monitor readings.
 
 ---
 
-## Licence
+## What changed from the earlier prototype
 
-Three.js is MIT licensed and bundled into the file. Choose a licence for this
-repository — MIT is the usual choice for teaching material meant to be reused.
+The old `3d-test-2.html` used hand-written WebGL. These were the blocking
+problems, and how they are fixed here:
+
+| Problem | Fix |
+|---|---|
+| Clicks were matched to **percentages of the screen**, so every interaction landed on the wrong object as soon as the camera moved | A real `Raycaster` tests the actual 3D geometry — correct from any angle |
+| `gl.clear` never cleared the depth buffer while depth testing was on, corrupting the image after the first frame | Three.js manages the frame buffers |
+| Four overlapping click listeners on one canvas — a single click fired several events at once | One picking path, plus drag-vs-click detection so orbiting never triggers an answer |
+| `showSafetyQuestion` and `answerQuestion` were each defined twice, the second silently replacing the first | Single definition, content-driven |
+| A new GPU buffer was created for every object on every frame | Geometry is uploaded once |
+| No lighting — every face of every box was the same flat colour | Directional + hemisphere lighting with soft shadows |
+| No touch support; WASD only | Orbit/pinch controls that work on phone, tablet and desktop |
+| No progression, scoring, feedback or record of performance | 11 gated checks, per-attempt scoring, rationale after every answer, printable debrief |
+
+**Files you can delete from the repository:**
+
+- `three.module 2.js` — a broken, partial copy of Three.js (the space in the
+  filename also makes it unimportable). Three.js now loads from a CDN.
+- `3d-test.html` — the "does JavaScript work" test, no longer needed.
+- `3d-test-2.html` — superseded, but worth keeping in git history.
+- `VRButton.js` — the official add-on is loaded from the CDN instead.
+
+Keep the old 2D version if you want a no-WebGL fallback: rename it to
+something like `2d-simple.html`.
+
+---
+
+## How it plays
+
+The student can only work in a clinically sensible order — hand hygiene gates
+patient contact, identification gates the chart, the chart gates drawing up the
+drug, and so on. Clicking a locked station explains what has to happen first.
+
+Each station asks one question. A wrong answer explains **why it is unsafe** and
+lets the student try again for half marks. A right answer shows the rationale
+and, where relevant, changes the room: the side rail rises, the bed drops to its
+lowest height, the brake goes green, the call bell returns to the patient's
+hand, the phlebitic cannula is re-sited.
+
+At the end there is a debrief table showing every check, whether it was right
+first time, the score and the elapsed time. **Print / save as PDF** produces a
+clean sheet for the student's portfolio or for your records.
+
+Tapping any row in the "Safety checks" panel turns the camera to that station —
+useful when demonstrating a specific point to a class.
+
+### Scoring
+
+150 points across 11 checks. Full marks on the first attempt, half on a retry.
+≥90 % excellent, ≥70 % good, below that the module should be repeated.
+
+---
+
+## VR
+
+The VR button appears automatically on headsets that support WebXR (Meta Quest
+via the built-in browser, and any WebXR-capable desktop headset). Point a
+controller at a station and pull the trigger; the question appears on a panel in
+front of you. Everything else behaves the same.
+
+VR needs HTTPS — GitHub Pages provides that. It is the newest part of the code
+and has had the least testing on real hardware, so try it before using it with a
+class.
+
+---
+
+## Clinical content
+
+Built around standard patient-safety teaching: the WHO five moments of hand
+hygiene, two-identifier patient verification, the rights of medication
+administration, paracetamol dosing limits (4 g / 24 h, 15 mg/kg under 50 kg),
+visual infusion phlebitis assessment, early warning scores, fall-prevention bed
+configuration, contemporaneous documentation, and sharps handling.
+
+Review the wording against your institution's own policies before using it for
+assessment — thresholds and escalation protocols vary between hospitals.
 
 ---
 
 ## عربي
 
-محاكاة تفاعلية ثلاثية الأبعاد لسلامة المريض، لطلبة التمريض. سيناريو واحد —
-أمر بإعطاء بيرفالجان ١ غرام وريدي بشكل فوري لمريضة بالغة لديها حرارة — يمر
-عبر ٧ فحوصات سلامة، على الشاشة أو داخل نظارة الواقع الافتراضي.
+محاكاة تفاعلية ثلاثية الأبعاد لسلامة المريض، لطلبة التمريض، مبنية على Three.js
+و WebXR. سيناريو واحد — أمر بإعطاء بيرفالجان ١ غرام وريدي بشكل فوري لمريضة
+بالغة لديها حرارة — يمر عبر ١١ فحص سلامة تغطي إعطاء الأدوية والوقاية من السقوط.
 
-**كل شيء داخل ملف واحد**: مكتبة Three.js وكود المحاكاة والخط كلها مدمجة.
-انقر على `index.html` مرتين ويشتغل بدون إنترنت وبدون تثبيت. النظارة تحتاج
-رابط `https://` — ارفعه على Netlify Drop أو GitHub Pages.
+**التشغيل:** المحاكاة تحمّل Three.js كوحدة ES، لذلك **فتح `index.html` بالنقر
+المزدوج لن يعمل**. ارفع الملفات إلى المستودع ثم فعّل GitHub Pages من
+Settings ← Pages ← فرع `main` ومجلد الجذر، وسيصبح الرابط جاهزاً للمشاركة مع
+الطلبة خلال دقيقة.
 
-### لوحة الأسئلة تنتقل لأي جدار
+**التعديل على المحتوى:** كل النصوص والأسئلة والإجابات والتفسيرات بالعربي
+والإنجليزي موجودة في ملف واحد هو `js/content.js`. لإضافة فحص جديد: أضف الجسم في
+`js/scene.js` مع `markInteractive(group, 'id')`، ثم أضف المهمة في `content.js`
+بنفس المعرّف. القائمة والنقاط والتقرير النهائي ستتحدث تلقائياً.
 
-اضغط أيقونة اللوحة أسفل اليسار أو زر **V**. تظهر لك أزرار: تتبع الرأس، الجدار
-الخلفي، الأيمن، الأيسر، الأمامي — مع تحكم بالموضع على الجدار والارتفاع
-والحجم. اللوحة تُرسم في الغرفة وأنت تعدّل، فتشوف مكانها قبل ما تلبس النظارة،
-والاختيار يُحفظ على الجهاز.
+**ترتيب الخطوات:** الطالب لا يستطيع القفز فوق الخطوات — نظافة اليدين تسبق
+ملامسة المريض، والتحقق من الهوية يسبق مراجعة الملف، وهكذا. الإجابة الخاطئة تشرح
+سبب خطورتها وتسمح بمحاولة ثانية بنصف الدرجة، والإجابة الصحيحة تعرض التفسير
+العلمي وتغيّر الغرفة فعلياً: يرتفع حاجز السرير، وينخفض السرير، ويعود جرس النداء
+إلى يد المريضة.
 
-الوضع الافتراضي هو **الجدار الأيمن** لأنه الجدار الوحيد الفاضي في هذي الغرفة؛
-الجدار الخلفي فيه الشاشة ووحدة الرأس وصندوق الحادّة والمعقّم والنافذة.
+في النهاية يظهر تقرير أداء قابل للطباعة أو الحفظ كملف PDF.
 
-**داخل النظارة**: اضغط زر القبضة (grip) — يصير المؤشر برتقالي — بعدين صوّب على
-أي جدار واضغط الزناد (trigger) فتلتصق اللوحة هناك. اضغط القبضة مرة ثانية
-للإلغاء.
-
-### الكلام مع المريضة
-
-اضغط أيقونة المايك في الشريط العلوي. يفتح شريط تحت فيه المحادثة وأسئلة جاهزة.
-
-- **بالمايك**: اضغط الزر الدائري وتكلم. الميزة هذي تحتاج Chrome أو Edge
-  وإنترنت، ودقتها بالعربي ضعيفة. إذا ما كانت متوفرة يصير الزر رمادي.
-- **بالضغط على السؤال**: يشتغل دائماً — جوال، عرض، نظارة، وبدون إنترنت.
-- **داخل النظارة**: الأسئلة موجودة أسفل لوحة الأسئلة نفسها، صوّب واضغط الزناد.
-  ما في مايك داخل النظارة لأن متصفح Quest ما يعتمد عليه.
-- **عربي / إنجليزي**: زرّين في الشريط. إذا كلمتها بالعربي تجاوبك بالعربي حتى
-  لو الزر على الإنجليزي.
-
-إجاباتها فيها المفاتيح السريرية: تقول البنسلين لما تسألها عن الحساسية، وتقول
-إن مكان الكانيولا يحرقها من أمس لما تسألها عن الألم، وتقول إن جرس النداء طاح
-جنب السرير. السؤال قبل الفحص هو المقصود.
-
-**تنبيه**: راجع صياغة المحتوى الطبي مقابل سياسات مستشفاك قبل استخدامه في
+**تنبيه:** راجع صياغة المحتوى الطبي مقابل سياسات مستشفاك قبل استخدامه في
 التقييم الرسمي، فبعض الحدود وبروتوكولات التصعيد تختلف بين المؤسسات.
+
+---
+
+## Licence
+
+Three.js is MIT licensed and loaded from a CDN. Choose a licence for this
+repository — MIT is the usual choice for teaching material you want others to
+reuse.
